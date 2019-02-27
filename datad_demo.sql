@@ -42,3 +42,9 @@ INSERT INTO datad_demo.customer_details VALUES(
 "yes"
 );
 
+
+CREATE TABLE datad_demo.others_customer_questions(
+customer_name varchar(50),
+question varchar(50),
+answer varchar(50)
+);

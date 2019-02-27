@@ -8,15 +8,14 @@ def selectquery(table_name):
         all_records.append(row)
 
     closeConn(cursor, conn)
-
     return all_records
 
 
-def select_where_query(table_name,name):
+def select_where_query(table_name,col_name,name):
 
     cursor,conn = getConn()
 
-    query="select * from "+table_name +" where masjid_name = '"+name+"'"
+    query="select * from "+table_name +" where "+col_name+" = '"+name+"'"
     cursor.execute(query)
     all_records=[]
     for row in cursor:
@@ -32,7 +31,7 @@ def insertQuery(table_name,columns,values):
     cursor, conn = getConn()
     # query = INSERT INTO masjid.customer (name,email,password,reg_id,latitute,langitute) VALUES("Masjid1","name1@name1.com","name1","name1reg","21",'-21');
     query = "INSERT INTO " + table_name + " "+columns+" VALUES" + values + ";"
-    # print(query)
+    print(query)
     try:
         cursor.execute(query)
         conn.commit()

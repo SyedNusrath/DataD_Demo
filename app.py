@@ -17,6 +17,7 @@ from os import environ
 
 from flask import Flask, redirect, render_template, request, url_for
 import mysql_connection as sql_c
+import ast
 
 app = Flask(__name__)
 
@@ -42,6 +43,14 @@ def login():
 def register():
     """Basic home page."""
     return render_template('register.html')
+
+@app.route('/view_questionnaire_details', methods=['POST'])
+def view_questionnaire_details():
+    """Basic home page."""
+    print("in view_questionnaire_details",request.json['customer_id'])
+    rows = sql_c.select_where_query("others_customer_questions","customer_name",str(request.json['customer_id']))
+    print(rows)
+    return str(rows)
 
 @app.route('/forgot_password')
 def forgot_password():
@@ -82,6 +91,19 @@ def form_details():
 
     return render_template('form.html')
 
+@app.route('/other_question_anwsers', methods=['POST'])
+def other_question_anwsers():
+    """Basic home page."""
+    print("in other_question_anwsers")
+    customer_id_arr=ast.literal_eval(request.json['customer_id_arr'])
+    question_arr=ast.literal_eval(request.json['question_arr'])
+    awnser_arr=ast.literal_eval(request.json['awnser_arr'])
+    print(type(customer_id_arr),question_arr,awnser_arr)
+    for cus,qes,awn in zip(customer_id_arr,question_arr,awnser_arr):
+        columns = ("customer_name","question","answer")
+        print(columns,(cus,qes,awn))
+        sql_c.insertQuery("datad_demo.others_customer_questions",str(columns).replace("'","").replace('"',""),str((cus,qes,awn)))
+    return str("successfully added to database")
 
 if __name__ == '__main__':
     app.config['TEMPLATES_AUTO_RELOAD'] = True
